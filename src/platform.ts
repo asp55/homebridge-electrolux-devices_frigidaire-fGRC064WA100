@@ -271,7 +271,13 @@ export class ElectroluxDevicesPlatform implements DynamicPlatformPlugin {
                 `/api/v1/appliances/${applianceId}/state`
             );
 
-            return response.data;
+            const valuesToLowercase = (obj)=>Object.keys(obj).reduce((a,key)=>{
+                const out = {...a};
+                out[key] = typeof obj[key] === 'string' ? obj[key].toLowerCase() : typeof obj[key] === 'object' ? valuesToLowercase(obj[key]) : obj[key];
+                return out;
+            }, {})
+
+            return valuesToLowercase(response.data) as ApplianceState;
         } catch {
             return null;
         }
@@ -289,7 +295,7 @@ export class ElectroluxDevicesPlatform implements DynamicPlatformPlugin {
 
         const appliances = await this.getAppliances();
 
-        appliances.map(async (applianceItem) => {
+        await Promise.all(appliances.map(async (applianceItem) => {
             if (!DEVICES[applianceItem.applianceType]) {
                 this.log.warn(
                     'Accessory not found for model:',
@@ -385,7 +391,7 @@ export class ElectroluxDevicesPlatform implements DynamicPlatformPlugin {
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
                 platformAccessory
             ]);
-        });
+        }));
 
         this.log.info('Devices discovered!');
         this.devicesDiscovered = true;
