@@ -1,6 +1,9 @@
 import { Mode } from './applianceState';
 
-export type DeviceType = 'PORTABLE_AIR_CONDITIONER' | 'AIR_PURIFIER';
+export type DeviceType =
+    | 'PORTABLE_AIR_CONDITIONER'
+    | 'AIR_PURIFIER'
+    | 'WINDOW_AIR_CONDITIONER';
 
 export type Appliance = {
     applianceInfo: ApplianceInfo;
@@ -18,7 +21,7 @@ export type ApplianceInfo = {
 };
 
 export type Capabilities = {
-    /* Comfort 600 */
+    /* Air conditioners */
     mode?: {
         values: Record<Uppercase<Mode>, Record<string, unknown>>;
     };
@@ -27,7 +30,15 @@ export type Capabilities = {
         min: number;
         step: number;
     };
+    targetTemperatureF?: {
+        max: number;
+        min: number;
+        step: number;
+    };
     fanSpeedState?: {
+        values: Record<string, unknown>;
+    };
+    fanSpeedSetting?: {
         values: Record<string, unknown>;
     };
     verticalSwing?: {

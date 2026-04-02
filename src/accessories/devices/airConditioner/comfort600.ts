@@ -1,14 +1,14 @@
 import { PlatformAccessory, CharacteristicValue, Service } from 'homebridge';
-import { ElectroluxDevicesPlatform } from '../../platform';
-import { Appliance } from '../../definitions/appliance';
+import { ElectroluxDevicesPlatform } from '../../../platform';
+import { Appliance } from '../../../definitions/appliance';
 import _ from 'lodash';
-import { ElectroluxAccessoryController } from '../controller';
-import { ApplianceItem } from '../../definitions/appliances';
+import { ElectroluxAccessoryController } from '../../controller';
+import { ApplianceItem } from '../../../definitions/appliances';
 import {
     ApplianceState,
     FanSpeedSetting,
     Mode
-} from '../../definitions/applianceState';
+} from '../../../definitions/applianceState';
 
 /**
  * Platform Accessory
@@ -183,7 +183,12 @@ export class Comfort600 extends ElectroluxAccessoryController {
             .getCharacteristic(
                 this.platform.Characteristic.CoolingThresholdTemperature
             )
-            .setValue(this.state.properties.reported.mode === 'auto' ? this.appliance.capabilities.targetTemperatureC?.max ?? 32 : this.state.properties.reported.targetTemperatureC)
+            .setValue(
+                this.state.properties.reported.mode === 'auto'
+                    ? (this.appliance.capabilities.targetTemperatureC?.max ??
+                          32)
+                    : this.state.properties.reported.targetTemperatureC
+            )
             .setProps({
                 minValue:
                     this.appliance.capabilities.targetTemperatureC?.min ?? 16,
@@ -272,6 +277,7 @@ export class Comfort600 extends ElectroluxAccessoryController {
                 return this.platform.Characteristic.CurrentHeaterCoolerState
                     .HEATING;
             case 'auto':
+            default:
                 if (
                     this.appliance.capabilities.mode?.values['HEAT'] ===
                     undefined
@@ -302,6 +308,7 @@ export class Comfort600 extends ElectroluxAccessoryController {
                 return this.platform.Characteristic.TargetHeaterCoolerState
                     .HEAT;
             case 'auto':
+            default:
                 return this.platform.Characteristic.TargetHeaterCoolerState
                     .AUTO;
         }
@@ -614,4 +621,3 @@ export class Comfort600 extends ElectroluxAccessoryController {
         }
     }
 }
-

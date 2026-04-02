@@ -59,9 +59,9 @@ type ApplianceStateValue = 'running' | 'off';
 
 type Toggle = 'on' | 'off';
 
-type TemperatureRepresentation = 'celcius';
+type TemperatureRepresentation = 'celcius' | 'fahrenheit';
 
-export type Mode = 'auto' | 'cool' | 'heat';
+export type Mode = 'auto' | 'cool' | 'heat' | 'eco' | 'fanonly' | 'off';
 
 export type FanSpeedSetting = 'auto' | 'low' | 'middle' | 'high';
 
